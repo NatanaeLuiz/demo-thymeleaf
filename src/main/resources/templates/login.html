@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tela de Login</title>
+    <style>
+        body { font-family: Arial; background-color: #f7f7f7; }
+        .login-container {
+            width: 300px; margin: 100px auto; padding: 20px;
+            background-color: white; border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input { width: 100%; padding: 8px; margin: 5px 0; }
+        button { width: 100%; padding: 8px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        .erro { color: red; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Login</h2>
+    <form th:action="@{/login}" method="POST">
+        <input type="text" name="usuario" placeholder="Usuário" required>
+        <input type="password" name="senha" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+    </form>
+    <div th:if="${erro}" class="erro">Usuário ou senha inválidos!</div>
+</div>
+</body>
+</html>
