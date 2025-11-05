@@ -1,13 +1,32 @@
 package br.com.catolica.demo_thymeleaf.repository;
 
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.catolica.demo_thymeleaf.model.Usuario;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByUsuarioAndSenha(String usuario, String senha);
+public class UsuarioRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public UsuarioRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public Usuario autenticar(String username, String senha) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM USUARIO WHERE usuario = ? AND senha = ?",
+                    (rs, rowNum) -> {
+                        Usuario u = new Usuario();
+                        u.setId(rs.getLong("id"));
+                        u.setUsuario(rs.getString("usuario"));
+                        u.setSenha(rs.getString("senha"));
+                        System.out.println("retorno : "  + u.toString());
+                        return u;
+                    }, username, senha);
+        } catch (Exception e) {
+            return null; // usuário não encontrado
+        }
+    }
 }

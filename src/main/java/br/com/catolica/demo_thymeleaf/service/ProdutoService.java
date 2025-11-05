@@ -17,18 +17,21 @@ public class ProdutoService {
     }
 
     public List<Produto> listarTodos() {
-        return repository.findAll();
+        return repository.listarTodos();
     }
 
-    public Produto salvar(Produto produto) {
-        return repository.save(produto);
+    public Produto buscarPorCodigo(int codigo) {
+        return repository.buscarPorCodigo(codigo);
     }
 
-    public Produto buscarPorId(int id) {
-        return repository.findById(id).orElse(null);
+    public void salvar(Produto produto) {
+        if (produto.getCodigo() == 0)
+            repository.salvar(produto);
+        else
+            repository.atualizar(produto);
     }
 
-    public void excluir(int id) {
-        repository.deleteById(id);
+    public void excluir(int codigo) {
+        repository.deletar(codigo);
     }
 }

@@ -1,7 +1,9 @@
 package br.com.catolica.demo_thymeleaf.controller;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.catolica.demo_thymeleaf.model.Produto;
 import br.com.catolica.demo_thymeleaf.service.ProdutoService;
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -25,7 +29,9 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public String listar(Model model) {
+    public String listar(Model model, HttpSession session) {
+        if (session.getAttribute("usuarioLogado") == null)
+            return "redirect:/";
         List<Produto> produtos = service.listarTodos();
         model.addAttribute("produtos", produtos);
         return "produtos/listar";
@@ -38,14 +44,15 @@ public class ProdutoController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@ModelAttribute Produto produto) {
+    public String salvar(@ModelAttribute Produto produto,
+                        @RequestParam("validade") @DateTimeFormat(pattern = "yyyy-MM-dd") Date validade) {
         service.salvar(produto);
         return "redirect:/produtos";
     }
 
     @GetMapping("/editar/{codigo}")
     public String editar(@PathVariable int codigo, Model model) {
-        Produto produto = service.buscarPorId(codigo);
+        Produto produto = service.buscarPorCodigo(codigo);
         model.addAttribute("produto", produto);
         return "produtos/form";
     }
