@@ -1,7 +1,5 @@
 package br.com.catolica.demo_thymeleaf.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import br.com.catolica.demo_thymeleaf.model.Usuario;
@@ -18,7 +16,9 @@ public class LoginService {
     }
 
     public boolean validarLogin(String usuario, String senha) {
-        Optional<Usuario> user = usuarioRepository.findByUsuarioAndSenha(usuario, senha);
-        return user.isPresent();
+        System.out.println("usuario: " +  usuario + " senha: " + senha);
+        Usuario user = usuarioRepository.autenticar(usuario, senha);
+        System.out.println(user.toString());
+        return true;
     }
 }

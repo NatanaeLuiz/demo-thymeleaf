@@ -25,5 +25,16 @@
     </form>
     <div th:if="${erro}" class="erro">Usuário ou senha inválidos!</div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const usuarioLogado = /*[[${session.usuarioLogado}]]*/ '';
+    if (usuarioLogado) {
+        sessionStorage.setItem("usuarioLogado", usuarioLogado);
+        console.log("Usuário logado salvo no sessionStorage:", sessionStorage.getItem("usuarioLogado"));
+    } else {
+        console.log("Nenhum usuário logado encontrado na sessão.");
+    }
+    /*]]>*/
+</script>
 </body>
 </html>
