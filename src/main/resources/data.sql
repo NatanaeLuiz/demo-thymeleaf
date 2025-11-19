@@ -1,1 +1,3 @@
-INSERT INTO USUARIO (ID, USUARIO, SENHA) VALUES (1, 'admin', '123');
+INSERT INTO usuario (usuario, senha)
+SELECT 'admin', '123'
+WHERE NOT EXISTS (SELECT 1 FROM usuario WHERE usuario = 'admin');
